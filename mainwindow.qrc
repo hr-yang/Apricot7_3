@@ -1,0 +1,25 @@
+<RCC>
+    <qresource prefix="/myicons">
+        <file>icons/back.ico</file>
+        <file>icons/down.ico</file>
+        <file>icons/front.ico</file>
+        <file>icons/left.ico</file>
+        <file>icons/right.ico</file>
+        <file>icons/rotate_clock.ico</file>
+        <file>icons/rotate_counter.ico</file>
+        <file>icons/up.ico</file>
+        <file>icons/windows.ico</file>
+        <file>icons/motorized.png</file>
+        <file>icons/nano.png</file>
+        <file>icons/stimulate.png</file>
+        <file>icons/fpga.png</file>
+        <file>icons/laser_ctrl.png</file>
+        <file>icons/mainwindow.jpg</file>
+        <file>icons/win.ico</file>
+        <file>icons/sigma.png</file>
+        <file>icons/sigma2.png</file>
+    </qresource>
+    <qresource prefix="/log">
+        <file>update_log.txt</file>
+    </qresource>
+</RCC>
