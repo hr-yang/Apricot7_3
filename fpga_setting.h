@@ -1,4 +1,4 @@
-#ifndef FPGA_SETTING_H
+﻿#ifndef FPGA_SETTING_H
 #define FPGA_SETTING_H
 
 #include <QDialog>
@@ -17,6 +17,7 @@
 #include <QLabel>
 #include <QCheckBox>
 #include <QButtonGroup>
+#include <QRadioButton>
 
 #include "fpgachannel.h"
 #include "fpga_ttl.h"
@@ -78,6 +79,11 @@ private:
     QLineEdit *mpExpTimeLineEdit;
     QLabel *mpRecievedCounter;
 
+    QRadioButton* mpProfile1RadioButton;
+    QRadioButton* mpProfile2RadioButton;
+    QRadioButton* mpProfile3RadioButton;
+    QRadioButton* mpProfile4RadioButton;
+
     //SIM相关控件
     QButtonGroup*  mpTrigEdgeButtonGroup;
     QSpinBox* mpTrigCountSpinBox;
@@ -105,6 +111,8 @@ private:
     void DataReceivePrepare(uchar data);
     void DataAnalyze(uchar *data_buf,uint16_t num);
 
+    QString getLastOpenPath();
+    void saveLastOpenPath(const QString &path);
 public slots:
         void cameraTrigTestSlot();
 

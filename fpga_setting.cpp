@@ -1,4 +1,4 @@
-#include "fpga_setting.h"
+﻿#include "fpga_setting.h"
 #include "qt_settings_widgetdatacontrol.h"
 #include <QDebug>
 #include <QSettings>
@@ -50,44 +50,40 @@ FPGA_setting::FPGA_setting(QWidget *parent) :
 
     profileLayout->addWidget(pReadProfile);
     profileLayout->addWidget(pSaveProfile);
-    { //Profile1、2 3、4切换按钮组
 
 
-        QRadioButton* pProfile1RadioButton=new QRadioButton("Profile 1");
-        QRadioButton* pProfile2RadioButton=new QRadioButton("Profile 2");
-        QRadioButton* pProfile3RadioButton=new QRadioButton("Profile 3");
-        QRadioButton* pProfile4RadioButton=new QRadioButton("Profile 4");
+    //Profile Radio按钮布局
+    QVBoxLayout *profileRadioVLayout = new QVBoxLayout();
+    //Profile1、2 3、4切换按钮组
+    {
+        mpProfile1RadioButton=new QRadioButton("Profile 1");
+        mpProfile2RadioButton=new QRadioButton("Profile 2");
+        mpProfile3RadioButton=new QRadioButton("Profile 3");
+        mpProfile4RadioButton=new QRadioButton("Profile 4");
         //防止配置按钮本身进入配置表存储
-        pProfile1RadioButton->setObjectName(nullptr);
-        pProfile2RadioButton->setObjectName(nullptr);
-        pProfile3RadioButton->setObjectName(nullptr);
-        pProfile4RadioButton->setObjectName(nullptr);
+        mpProfile1RadioButton->setObjectName(nullptr);
+        mpProfile2RadioButton->setObjectName(nullptr);
+        mpProfile3RadioButton->setObjectName(nullptr);
+        mpProfile4RadioButton->setObjectName(nullptr);
 
         //RadioButton组设置
         mpProfileButtonGroup=new QButtonGroup();
-        mpProfileButtonGroup->addButton(pProfile1RadioButton,0);
-        mpProfileButtonGroup->addButton(pProfile2RadioButton,1);
-        mpProfileButtonGroup->addButton(pProfile3RadioButton,2);
-        mpProfileButtonGroup->addButton(pProfile4RadioButton,3);
-        pProfile1RadioButton->setChecked(true);  //设置初选项
+        mpProfileButtonGroup->addButton(mpProfile1RadioButton,0);
+        mpProfileButtonGroup->addButton(mpProfile2RadioButton,1);
+        mpProfileButtonGroup->addButton(mpProfile3RadioButton,2);
+        mpProfileButtonGroup->addButton(mpProfile4RadioButton,3);
+        mpProfile1RadioButton->setChecked(true);  //设置初选项
 
-        connect(pProfile1RadioButton, &QRadioButton::clicked, this, &FPGA_setting::profileModeButtonsSlot);
-        connect(pProfile2RadioButton, &QRadioButton::clicked, this, &FPGA_setting::profileModeButtonsSlot);
-        connect(pProfile3RadioButton, &QRadioButton::clicked, this, &FPGA_setting::profileModeButtonsSlot);
-        connect(pProfile4RadioButton, &QRadioButton::clicked, this, &FPGA_setting::profileModeButtonsSlot);
+        connect(mpProfile1RadioButton, &QRadioButton::clicked, this, &FPGA_setting::profileModeButtonsSlot);
+        connect(mpProfile2RadioButton, &QRadioButton::clicked, this, &FPGA_setting::profileModeButtonsSlot);
+        connect(mpProfile3RadioButton, &QRadioButton::clicked, this, &FPGA_setting::profileModeButtonsSlot);
+        connect(mpProfile4RadioButton, &QRadioButton::clicked, this, &FPGA_setting::profileModeButtonsSlot);
 
-        QVBoxLayout *profile12VLayout = new QVBoxLayout();
-        profile12VLayout->addWidget(pProfile1RadioButton);
-        profile12VLayout->addWidget(pProfile2RadioButton);
-
-        QVBoxLayout *profile34VLayout = new QVBoxLayout();
-        profile34VLayout->addWidget(pProfile3RadioButton);
-        profile34VLayout->addWidget(pProfile4RadioButton);
-
-    profileLayout->addLayout(profile12VLayout);
-    profileLayout->addLayout(profile34VLayout);
+        profileRadioVLayout->addWidget(mpProfile1RadioButton);
+        profileRadioVLayout->addWidget(mpProfile2RadioButton);
+        profileRadioVLayout->addWidget(mpProfile3RadioButton);
+        profileRadioVLayout->addWidget(mpProfile4RadioButton);
     }
-
 
     //TrigTest SWAM系统步进台扫描功能
     QHBoxLayout *horizontalLayout_4 = new QHBoxLayout();
@@ -130,6 +126,8 @@ FPGA_setting::FPGA_setting(QWidget *parent) :
 
     mpRecievedCounter=new QLabel("Recieved:"+QString::number(mRecievedCnt));
 
+
+    //界面上方第一行布局
     QHBoxLayout *horizontalLayout_tool = new QHBoxLayout;
     horizontalLayout_tool->addLayout(comLayout);
     horizontalLayout_tool->addItem(new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
@@ -180,16 +178,20 @@ FPGA_setting::FPGA_setting(QWidget *parent) :
     connect(TTL_channel4,&FPGA_TTL::sendSoftTrigSgn,this,&FPGA_setting::sendSoftTrigParamters);
     connect(TTL_channel5,&FPGA_TTL::sendSoftTrigSgn,this,&FPGA_setting::sendSoftTrigParamters);
 
+
+    //主页面布局
     QGridLayout *gridLayout = new QGridLayout;
     gridLayout->addLayout(horizontalLayout_tool, 0, 0, 1, 4);
-    gridLayout->addWidget(TTL_channel0,  1, 0, 1, 1);
-    gridLayout->addWidget(TTL_channel1,  1, 1, 1, 1);
-    gridLayout->addWidget(TTL_channel2,  1, 2, 1, 1);
-    gridLayout->addWidget(TTL_channel3,  2, 0, 1, 1);
-    gridLayout->addWidget(TTL_channel4,  2, 1, 1, 1);
-    gridLayout->addWidget(TTL_channel5,  2, 2, 1, 1);
-    gridLayout->addWidget(DA_channel0,   1, 3, 1, 1);
-    gridLayout->addWidget(DA_channel1,   2, 3, 1, 1);
+    gridLayout->addLayout(profileRadioVLayout, 1, 0, 1, 4);
+
+    gridLayout->addWidget(TTL_channel0,  2, 0, 1, 1);
+    gridLayout->addWidget(TTL_channel1,  2, 1, 1, 1);
+    gridLayout->addWidget(TTL_channel2,  2, 2, 1, 1);
+    gridLayout->addWidget(TTL_channel3,  3, 0, 1, 1);
+    gridLayout->addWidget(TTL_channel4,  3, 1, 1, 1);
+    gridLayout->addWidget(TTL_channel5,  3, 2, 1, 1);
+    gridLayout->addWidget(DA_channel0,   2, 3, 1, 1);
+    gridLayout->addWidget(DA_channel1,   3, 3, 1, 1);
 
     this->setLayout(gridLayout);
 
@@ -443,7 +445,17 @@ void FPGA_setting::closeEvent(QCloseEvent * event)
     event->accept();
 }
 
+// 获取上次保存的路径或提供一个默认路径
+QString FPGA_setting::getLastOpenPath()
+{
+    return settings->value("lastOpenPath").toString();
+}
 
+// 保存路径到设置
+void FPGA_setting::saveLastOpenPath(const QString& path)
+{
+    settings->setValue("lastOpenPath", path);
+}
 
 void FPGA_setting::showSIMDialogSlot()
 {
@@ -513,23 +525,32 @@ void FPGA_setting::openComButtonSlot()
 //读取配置文件
 void FPGA_setting::readProfileSlot()
 {
-    QString fileName;
-    fileName = QFileDialog::getOpenFileName(this,
+
+    QString lastPath = getLastOpenPath();
+    QString filePath = QFileDialog::getOpenFileName(this,
         tr("Open profile"),
-        QStandardPaths::writableLocation(QStandardPaths::DesktopLocation),
+        lastPath,
         tr("Profile Files (*.ini);"));
 
-    if (!fileName.isNull())
+    if (!filePath.isEmpty())
     {
+        saveLastOpenPath(filePath); // 保存新的路径
+    }
+
+    if (!filePath.isNull())
+    {
+        QString fileName = QFileInfo(filePath).fileName();
+
         if(mpProfileButtonGroup->checkedId()==0)
         {
            if(settingsFile0!=nullptr)//先删除指针
            {
                delete settingsFile0;
            }
-           settingsFile0 = new QSettings(fileName, QSettings::IniFormat,this);//必须在save之后磁盘才会有该文件
+           settingsFile0 = new QSettings(filePath, QSettings::IniFormat,this);//必须在save之后磁盘才会有该文件
            settingsFile0->setIniCodec("UTF-8");
            Qt_Settings_WidgetDataControl::read(settingsFile0,this,Qt_Settings_WidgetDataControl::controlFlgasWidgets);
+           mpProfile1RadioButton->setText(fileName);
         }
         else if(mpProfileButtonGroup->checkedId()==1)
         {
@@ -537,9 +558,10 @@ void FPGA_setting::readProfileSlot()
            {
                delete settingsFile1;
            }
-           settingsFile1 = new QSettings(fileName, QSettings::IniFormat,this);//必须在save之后磁盘才会有该文件
+           settingsFile1 = new QSettings(filePath, QSettings::IniFormat,this);//必须在save之后磁盘才会有该文件
            settingsFile1->setIniCodec("UTF-8");
            Qt_Settings_WidgetDataControl::read(settingsFile1,this,Qt_Settings_WidgetDataControl::controlFlgasWidgets);
+           mpProfile2RadioButton->setText(fileName);
         }
         else if(mpProfileButtonGroup->checkedId()==2)
         {
@@ -547,9 +569,10 @@ void FPGA_setting::readProfileSlot()
            {
                delete settingsFile2;
            }
-           settingsFile2 = new QSettings(fileName, QSettings::IniFormat,this);//必须在save之后磁盘才会有该文件
+           settingsFile2 = new QSettings(filePath, QSettings::IniFormat,this);//必须在save之后磁盘才会有该文件
            settingsFile2->setIniCodec("UTF-8");
            Qt_Settings_WidgetDataControl::read(settingsFile2,this,Qt_Settings_WidgetDataControl::controlFlgasWidgets);
+           mpProfile3RadioButton->setText(fileName);
         }
         else if(mpProfileButtonGroup->checkedId()==3)
         {
@@ -557,23 +580,31 @@ void FPGA_setting::readProfileSlot()
            {
                delete settingsFile3;
            }
-           settingsFile3 = new QSettings(fileName, QSettings::IniFormat,this);//必须在save之后磁盘才会有该文件
+           settingsFile3 = new QSettings(filePath, QSettings::IniFormat,this);//必须在save之后磁盘才会有该文件
            settingsFile3->setIniCodec("UTF-8");
            Qt_Settings_WidgetDataControl::read(settingsFile3,this,Qt_Settings_WidgetDataControl::controlFlgasWidgets);
+           mpProfile4RadioButton->setText(fileName);
         }
      }
 }
 
 void FPGA_setting::saveProfileSlot()
 {
-    QString fileName;
-    fileName = QFileDialog::getSaveFileName(this,
+
+    QString lastPath = getLastOpenPath();
+    QString filePath = QFileDialog::getSaveFileName(this,
         tr("Save Profile"),
-        QStandardPaths::writableLocation(QStandardPaths::DesktopLocation),
+        lastPath,
         tr("Profile Files (*.ini)"));
 
-    if (!fileName.isNull())
+    if (!filePath.isEmpty())
     {
+        saveLastOpenPath(filePath); // 保存新的路径
+    }
+
+    if (!filePath.isNull())
+    {
+        QString fileName = QFileInfo(filePath).fileName();
 
         if(mpProfileButtonGroup->checkedId()==0)
         {
@@ -582,10 +613,11 @@ void FPGA_setting::saveProfileSlot()
                 delete settingsFile0;
             }
 
-            settingsFile0 = new QSettings(fileName, QSettings::IniFormat,this);//必须在save之后磁盘才会有该文件
+            settingsFile0 = new QSettings(filePath, QSettings::IniFormat,this);//必须在save之后磁盘才会有该文件
             settingsFile0->setIniCodec("UTF-8");
 
             Qt_Settings_WidgetDataControl::save(settingsFile0,this,Qt_Settings_WidgetDataControl::controlFlgasWidgets);
+            mpProfile1RadioButton->setText(fileName);
         }
         else if(mpProfileButtonGroup->checkedId()==1)
         {
@@ -594,10 +626,11 @@ void FPGA_setting::saveProfileSlot()
                 delete settingsFile1;
             }
 
-            settingsFile1 = new QSettings(fileName, QSettings::IniFormat,this);//必须在save之后磁盘才会有该文件
+            settingsFile1 = new QSettings(filePath, QSettings::IniFormat,this);//必须在save之后磁盘才会有该文件
             settingsFile1->setIniCodec("UTF-8");
 
             Qt_Settings_WidgetDataControl::save(settingsFile1,this,Qt_Settings_WidgetDataControl::controlFlgasWidgets);
+            mpProfile2RadioButton->setText(fileName);
         }
         else if(mpProfileButtonGroup->checkedId()==2)
         {
@@ -606,10 +639,11 @@ void FPGA_setting::saveProfileSlot()
                 delete settingsFile2;
             }
 
-            settingsFile2 = new QSettings(fileName, QSettings::IniFormat,this);//必须在save之后磁盘才会有该文件
+            settingsFile2 = new QSettings(filePath, QSettings::IniFormat,this);//必须在save之后磁盘才会有该文件
             settingsFile2->setIniCodec("UTF-8");
 
             Qt_Settings_WidgetDataControl::save(settingsFile2,this,Qt_Settings_WidgetDataControl::controlFlgasWidgets);
+            mpProfile3RadioButton->setText(fileName);
         }
         else if(mpProfileButtonGroup->checkedId()==3)
         {
@@ -618,10 +652,11 @@ void FPGA_setting::saveProfileSlot()
                 delete settingsFile3;
             }
 
-            settingsFile3 = new QSettings(fileName, QSettings::IniFormat,this);//必须在save之后磁盘才会有该文件
+            settingsFile3 = new QSettings(filePath, QSettings::IniFormat,this);//必须在save之后磁盘才会有该文件
             settingsFile3->setIniCodec("UTF-8");
 
             Qt_Settings_WidgetDataControl::save(settingsFile3,this,Qt_Settings_WidgetDataControl::controlFlgasWidgets);
+            mpProfile4RadioButton->setText(fileName);
         }
     }
 }
