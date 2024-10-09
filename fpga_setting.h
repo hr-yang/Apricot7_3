@@ -23,6 +23,7 @@
 #include "fpga_ttl.h"
 #include "mychartdata.h"
 #include "switchbutton.h"
+#include "molisdialog.h"
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -64,10 +65,10 @@ private:
     FPGA_TTL *TTL_channel5;
 
     //子界面
-
     QDialog*  gratingDialog;
     QDialog*  simDialog;
     QDialog*  switchDialog;
+    MolisDialog*  molisDialog;
 
     //需要用到的控件
     QLineEdit* mpGratingLineEdit;
@@ -157,6 +158,7 @@ private slots:
         void sendSwitchData(uchar s1, uchar s2);
 
 
+        void showMolisDialogSlot();
 signals:
         void sendCloseSgn(const QString &);
 };

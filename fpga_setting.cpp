@@ -112,6 +112,11 @@ FPGA_setting::FPGA_setting(QWidget *parent) :
     QPushButton* pChartPushButton=new QPushButton("Chart");
     connect(pChartPushButton,&QPushButton::clicked,this,&FPGA_setting::showChartSlot);
 
+    QPushButton* pMolisPushButton=new QPushButton("MoLiS");
+    connect(pMolisPushButton,&QPushButton::clicked,this,&FPGA_setting::showMolisDialogSlot);
+
+    molisDialog=new MolisDialog(this);
+
     QPushButton* pResetFPGAPushButton=new QPushButton("ResetFPGA");
     pResetFPGAPushButton->setStyleSheet("color:red");
     connect(pResetFPGAPushButton,&QPushButton::clicked,this,&FPGA_setting::sendSoftReset);
@@ -139,6 +144,7 @@ FPGA_setting::FPGA_setting(QWidget *parent) :
     horizontalLayout_tool->addWidget(pGratingPushButton);
     horizontalLayout_tool->addWidget(pSIMPushButton);
     horizontalLayout_tool->addWidget(pChartPushButton);
+    horizontalLayout_tool->addWidget(pMolisPushButton);
     horizontalLayout_tool->addWidget(pResetFPGAPushButton);
     horizontalLayout_tool->addItem(new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
     horizontalLayout_tool->addWidget(pSetParametersPushButton);
@@ -380,9 +386,6 @@ FPGA_setting::FPGA_setting(QWidget *parent) :
     gratingDialog->setLayout(pMainLayout);
 
     /****************************Chart Dialog ******************************************/
-
-//    m_chart = new QChart();
-//    thread = new QThread;
 //    mychartdata   = new MyChartData;
 //    connect(channel0,&fpgachannel::sendSgn,mychartdata,&MyChartData::chartDataProcessSlot);
 //    connect(mychartdata,&MyChartData::addseries,this,&FPGA_setting::addSeries);
@@ -806,6 +809,12 @@ void FPGA_setting::showChartSlot()
 //        ui->pushButton_chart->setText(tr("ShowChart"));
 //        chartWidget->close();
 //    }
+}
+
+
+void FPGA_setting::showMolisDialogSlot()
+{
+    molisDialog->show();
 }
 
 

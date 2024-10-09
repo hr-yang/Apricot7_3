@@ -26,6 +26,7 @@ DEFINES += QT_DEPRECATED_WARNINGS  #QT_NO_DEBUG_OUTPUT
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
+    molisdialog.cpp \
     motorizedstage.cpp \
     nanostage.cpp \
     PMC400.cpp \
@@ -50,6 +51,7 @@ SOURCES += \
 HEADERS += \
         mainwindow.h \
     fpga_setting.h \
+    molisdialog.h \
     switchbutton.h \
     motorizedstage.h \
     nanostage.h \
@@ -73,6 +75,7 @@ HEADERS += \
 
 FORMS += \
         mainwindow.ui \
+    molisdialog.ui \
     stimulate.ui \
     nanostage.ui \
     motorizedstage.ui \
