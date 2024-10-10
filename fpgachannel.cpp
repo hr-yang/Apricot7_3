@@ -1,4 +1,4 @@
-#include "fpgachannel.h"
+﻿#include "fpgachannel.h"
 #include "ui_fpgachannel.h"
 #include "qt_settings_widgetdatacontrol.h"
 #include <QDebug>
@@ -201,8 +201,8 @@ void fpgachannel::sendProcessSlot()
         //波形时间参数
         uint32_t   period_number = ui->lineEdit_PeriodNumber->text().toInt();
         float      period        = QString(ui->lineEdit_Period->text()).toFloat();
-        float      phase         = QString(ui->lineEdit_Phrase->text()).toFloat();
-        float      duty          = QString(ui->lineEdit_duty->text()).toFloat();
+        float      phase         = QString(ui->lineEdit_Phase->text()).toFloat();
+        float      duty          = QString(ui->lineEdit_Duty->text()).toFloat();
         int        step          = QString(ui->stepLineEdit->text()).toInt();
         int        read_len      = QString(ui->lineEdit_ReadLen->text()).toInt();
         int        start_value   = (max_value_tmp-min_value_tmp)*phase/period+min_value_tmp;//计算波形起始电压
@@ -354,12 +354,27 @@ void fpgachannel::sendProcessSlot()
     }
 }
 
+void fpgachannel::setParameters(bool enable, int trigSource, int trigEdge,int trigCount,int waveType, int burstNumber, double period, double phase, double duty, int step, int readLen, double dma_period)
+{
+    ui->groupBox->setChecked(enable);
 
+    ui->comboBox_Source->setCurrentIndex(trigSource);
+    ui->buttonGroup->button(trigEdge)->setChecked(true);
+    ui->spinBox_Count->setValue(trigCount);
+
+    ui->comboBox->setCurrentIndex(waveType);
+
+    ui->lineEdit_PeriodNumber->setText(QString::number(burstNumber));
+    ui->lineEdit_Period->setText(QString::number(period));
+    ui->lineEdit_Phase->setText(QString::number(phase));
+    ui->lineEdit_Duty->setText(QString::number(duty));
+    ui->stepLineEdit->setText(QString::number(step));
+    ui->lineEdit_ReadLen->setText(QString::number(readLen));
+    ui->lineEdit_Period_DMADA->setText(QString::number(dma_period));
+}
 
 
 void fpgachannel::setSyn()//一键设置同步功能
 {
     ui->pushButton_Send->click();//点击发送按钮
 }
-
-

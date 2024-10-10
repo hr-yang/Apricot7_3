@@ -1,4 +1,4 @@
-#include "fpga_ttl.h"
+﻿#include "fpga_ttl.h"
 #include "ui_fpga_ttl.h"
 #include <QDebug>
 
@@ -77,6 +77,20 @@ void FPGA_TTL::sendProcessSlot()
     {
         emit sendSoftTrigSgn(channel_axis);
     }
+}
+
+void FPGA_TTL::setParameters(bool enable, int trigSource, int trigEdge,int trigCount, int burstNumber, double period, double phase, double duty)
+{
+    ui->groupBox->setChecked(enable);
+
+    ui->comboBox_Source->setCurrentIndex(trigSource);
+    ui->setNowButtonGroup->button(trigEdge)->setChecked(true);
+    ui->spinBox_Count->setValue(trigCount);
+
+    ui->lineEdit_PeriodNumber->setText(QString::number(burstNumber));
+    ui->lineEdit_Period->setText(QString::number(period));
+    ui->lineEdit_Phase->setText(QString::number(phase));
+    ui->lineEdit_Duty->setText(QString::number(duty));
 }
 
 void FPGA_TTL::setSyn()//一键设置同步功能

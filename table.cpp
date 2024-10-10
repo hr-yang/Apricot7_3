@@ -1,4 +1,4 @@
-#include "table.h"
+﻿#include "table.h"
 #include "ui_table.h"
 #include <QKeyEvent>
 #include <QStandardPaths>
@@ -69,27 +69,23 @@ void Table::saveToExcelSlot()
         qDebug()<<"load file fails";
         return;
     }
-        QXlsx::Document xlsx(fileName);
-        int tableR = ui->tableWidget->rowCount();
-        int tableC = ui->tableWidget->columnCount();
 
-        //获取表头写做第一行
+    QXlsx::Document xlsx(fileName);
+    int tableR = ui->tableWidget->rowCount();
+    int tableC = ui->tableWidget->columnCount();
+
+    //写数据
+    for (int i=0; i<tableR; i++)
+    {
         for (int j=0; j<tableC; j++)
-            if ( ui->tableWidget->horizontalHeaderItem(j) != nullptr )
-                xlsx.write(1, j+1,ui->tableWidget->horizontalHeaderItem(j)->text());//注意xlsx文件的起始行列都从1开始
-
-        //写数据
-        for (int i=0; i<tableR; i++)
         {
-            for (int j=0; j<tableC; j++)
+            if ( ui->tableWidget->item(i,j) != nullptr )
             {
-                if ( ui->tableWidget->item(i,j) != nullptr )
-                {
-                    xlsx.write(i+2, j+1,ui->tableWidget->item(i,j)->text());//注意xlsx文件的起始行列都从1开始
-                }
+                xlsx.write(i+1, j+1,ui->tableWidget->item(i,j)->text());//注意xlsx文件的起始行列都从1开始
             }
         }
-        xlsx.saveAs(fileName);//写完之后一定要保存
+    }
+    xlsx.saveAs(fileName);//写完之后一定要保存
 }
 
 void Table::readFromExcelSlot()
@@ -111,7 +107,6 @@ void Table::readFromExcelSlot()
     int nRowCount    = nLastRow-nStartRow+1;       //获取行数
     int nColumnCount = nLastColumn-nStartColumn+1;    //获取列数
 
-
     //先把table的内容清空
     ui->tableWidget->clear();
     for (int n=0; n<ui->tableWidget->columnCount(); n++)
@@ -120,22 +115,10 @@ void Table::readFromExcelSlot()
     }
 
     //根据Excel设置表尺寸
-    ui->spinBox_Rows->setValue(nRowCount-1);
+    ui->spinBox_Rows->setValue(nRowCount);
     ui->spinBox_Columns->setValue(nColumnCount);
-    ui->tableWidget->setRowCount(nRowCount-1);//第一行为表头
+    ui->tableWidget->setRowCount(nRowCount);
     ui->tableWidget->setColumnCount(nColumnCount);
-
-    //获取excel中的第一行数据作为表头
-    QStringList headerList;
-    for (int n = nStartColumn; n<=nLastColumn; n++ )
-    {
-        QVariant temp=xlsx.read(nStartRow,n);
-        if ( !temp.isNull() )
-            headerList<<temp.toString();
-    }
-    //重新创建表头
-    ui->tableWidget->setColumnCount(nColumnCount);
-    ui->tableWidget->setHorizontalHeaderLabels(headerList);
 
     //插入数据
     for(int i=0;i<nRowCount;i++)//行列都从0开始，否则会卡死！！！
@@ -143,10 +126,11 @@ void Table::readFromExcelSlot()
         for(int j=0; j<nColumnCount; j++)
         {
             //tableWidget_DA->setItem(i,j, new QTableWidgetItem(xlsx.read(nStartRow+i+1,nStartColumn+j).toString()));  //会读入公式
-            if (QXlsx::Cell *cell=xlsx.cellAt(nStartRow+i+1, nStartColumn+j))
+            if (QXlsx::Cell *cell=xlsx.cellAt(nStartRow+i, nStartColumn+j))
                 ui->tableWidget->setItem(i,j, new QTableWidgetItem(cell->value().toString()));
         }
     }
 
+    ui->tableWidget->resizeColumnsToContents();
     QMessageBox::information(nullptr, "Table", "read sucess", QMessageBox::Yes, QMessageBox::Yes);
 }

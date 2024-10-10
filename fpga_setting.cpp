@@ -115,8 +115,6 @@ FPGA_setting::FPGA_setting(QWidget *parent) :
     QPushButton* pMolisPushButton=new QPushButton("MoLiS");
     connect(pMolisPushButton,&QPushButton::clicked,this,&FPGA_setting::showMolisDialogSlot);
 
-    molisDialog=new MolisDialog(this);
-
     QPushButton* pResetFPGAPushButton=new QPushButton("ResetFPGA");
     pResetFPGAPushButton->setStyleSheet("color:red");
     connect(pResetFPGAPushButton,&QPushButton::clicked,this,&FPGA_setting::sendSoftReset);
@@ -200,6 +198,27 @@ FPGA_setting::FPGA_setting(QWidget *parent) :
     gridLayout->addWidget(DA_channel1,   3, 3, 1, 1);
 
     this->setLayout(gridLayout);
+
+    molisDialog=new MolisDialog(this);
+    connect(molisDialog,&MolisDialog::setTTLParameters,this,[=](int ch, bool enable, int trigSource, int trigEdge, int trigCount, int burstNumber, double period, double phase, double duty){
+        switch (ch) {
+            case 0: TTL_channel0->setParameters(enable, trigSource, trigEdge, trigCount, burstNumber, period, phase, duty); break;
+            case 1: TTL_channel1->setParameters(enable, trigSource, trigEdge, trigCount, burstNumber, period, phase, duty); break;
+            case 2: TTL_channel2->setParameters(enable, trigSource, trigEdge, trigCount, burstNumber, period, phase, duty); break;
+            case 3: TTL_channel3->setParameters(enable, trigSource, trigEdge, trigCount, burstNumber, period, phase, duty); break;
+            case 4: TTL_channel4->setParameters(enable, trigSource, trigEdge, trigCount, burstNumber, period, phase, duty); break;
+            case 5: TTL_channel5->setParameters(enable, trigSource, trigEdge, trigCount, burstNumber, period, phase, duty); break;
+        default: break;
+        }
+    });
+
+    connect(molisDialog,&MolisDialog::setDAParameters,this,[=](int ch,  bool enable, int trigSource, int trigEdge,int trigCount, int waveType, int burstNumber, double period, double phase, double duty, int step, int readLen, double dma_period){
+        switch (ch) {
+            case 0: DA_channel0->setParameters(enable, trigSource, trigEdge,trigCount, waveType, burstNumber, period, phase, duty, step, readLen, dma_period); break;
+            case 1: DA_channel1->setParameters(enable, trigSource, trigEdge,trigCount, waveType, burstNumber, period, phase, duty, step, readLen, dma_period); break;
+        default: break;
+        }
+    });
 
     /*************************** Switch Dialog 子界面设置 **************************************************/
     switchDialog = new QDialog(this);

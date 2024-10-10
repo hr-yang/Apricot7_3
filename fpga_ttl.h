@@ -1,4 +1,4 @@
-#ifndef FPGA_TTL_H
+﻿#ifndef FPGA_TTL_H
 #define FPGA_TTL_H
 
 #include <QWidget>
@@ -37,6 +37,7 @@ public:
 
 public slots:
     void sendProcessSlot();
+    void setParameters(bool enable, int trigSource, int trigEdge, int trigCount, int burstNumber, double period, double phase, double duty);
 
 signals:
     void send_TTL_ParamtersSgn(uchar axis,uchar trig_source,uchar trig_edge,uchar trig_count,

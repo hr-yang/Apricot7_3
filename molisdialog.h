@@ -20,8 +20,15 @@ private slots:
 
     void on_pushButtonExport_clicked();
 
+    void on_pushButton_Update_clicked();
+
 private:
     Ui::MolisDialog *ui;
+
+signals:
+    void setTTLParameters(int ch, bool enable, int trigSource, int trigEdge, int trigCount, int burstNumber, double period, double phase, double duty);
+    void setDAParameters(int ch, bool enable, int trigSource, int trigEdge,int trigCount, int waveType, int burstNumber, double period, double phase, double duty, int step, int readLen, double dma_period);
+
 };
 
 #endif // MOLISDIALOG_H

@@ -297,7 +297,7 @@ QGroupBox::title {
       </rect>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page_AXIDA">
       <widget class="QWidget" name="layoutWidget_2">
@@ -332,7 +332,7 @@ QGroupBox::title {
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QLineEdit" name="lineEdit_Phrase">
+         <widget class="QLineEdit" name="lineEdit_Phase">
           <property name="text">
            <string>0</string>
           </property>
@@ -348,7 +348,7 @@ QGroupBox::title {
         <item row="2" column="0">
          <widget class="QLabel" name="label_5">
           <property name="text">
-           <string>phrase</string>
+           <string>Phase</string>
           </property>
          </widget>
         </item>
@@ -381,7 +381,7 @@ QGroupBox::title {
         </rect>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="page_DoubleTriangle"/>
        <widget class="QWidget" name="page_SingleTriangle"/>
@@ -418,12 +418,12 @@ QGroupBox::title {
           </rect>
          </property>
          <property name="text">
-          <string>step</string>
+          <string>Step</string>
          </property>
         </widget>
        </widget>
        <widget class="QWidget" name="page_Square">
-        <widget class="QLineEdit" name="lineEdit_duty">
+        <widget class="QLineEdit" name="lineEdit_Duty">
          <property name="geometry">
           <rect>
            <x>40</x>
@@ -446,7 +446,7 @@ QGroupBox::title {
           </rect>
          </property>
          <property name="text">
-          <string>duty</string>
+          <string>Duty</string>
          </property>
         </widget>
         <widget class="QLabel" name="label_duty2_3">

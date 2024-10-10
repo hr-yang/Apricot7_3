@@ -1,4 +1,4 @@
-#ifndef FPGACHANNEL_H
+﻿#ifndef FPGACHANNEL_H
 #define FPGACHANNEL_H
 
 #include <QWidget>
@@ -55,6 +55,7 @@ public slots:
     void openTableSlot();
     void sendToFPGASlot();
     void sendProcessSlot();
+    void setParameters(bool enable, int trigSource, int trigEdge,int trigCount, int waveType, int burstNumber, double period, double phase, double duty, int step, int readLen, double dma_period);
 signals:
     void send_DA_Sgn(uchar axis,uchar trig_source,uchar trig_edge,uchar trig_count,
                      uint32_t DA_in, uint32_t DA_min,uint32_t DA_max,
