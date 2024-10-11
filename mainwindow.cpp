@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "fpga_setting.h"
 #include "stimulate.h"
@@ -13,6 +13,8 @@
 #include <QMessageBox>
 #include <QFile>
 #include <QTextStream>
+
+#define VERSION_CHARLEN 4
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -43,8 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
     inputFile.close();
 
     int index=line.lastIndexOf(":");
-    QString releaseNo=line.mid(index-3,3);//：号前3个字符
-
+    QString releaseNo=line.mid( index-VERSION_CHARLEN, VERSION_CHARLEN );//最后一个冒号前VERSIONCHARLEN个字符为软件版本号
 
     this->setWindowTitle("Apricot "+releaseNo);
 

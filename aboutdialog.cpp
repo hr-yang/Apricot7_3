@@ -1,4 +1,4 @@
-#include "aboutdialog.h"
+﻿#include "aboutdialog.h"
 #include "ui_aboutdialog.h"
 #include <QDebug>
 #include <QFile>
@@ -25,9 +25,6 @@ AboutDialog::AboutDialog(QWidget *parent) :
     inputFile.close();
 
     ui->textEdit->setText(line);
-
-    int index=line.lastIndexOf(":");
-    qDebug()<<line.mid(index-3,3);
 }
 
 AboutDialog::~AboutDialog()
