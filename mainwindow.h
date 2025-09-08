@@ -1,4 +1,4 @@
-#ifndef MAINWINDOW_H
+﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
@@ -30,6 +30,7 @@ private:
     QAction *laserCtrlAction;
     QAction *sigmaCtrlAction;
     QAction *sigmaCtrl2Action;
+    QAction *sigmaCtrl3Action;
 
     QAction *aboutAction;
 
@@ -51,6 +52,7 @@ private slots:
     void OpenLaserCtrlSlot();
     void OpenSigmaCtrlSlot();
     void OpenSigmaCtrl2Slot();
+    void OpenSigmaCtrl3Slot();
     void AboutSlot();
 
     void motorizedDialogStartExposureSlot();

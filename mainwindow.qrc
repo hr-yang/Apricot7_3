@@ -18,6 +18,7 @@
         <file>icons/win.ico</file>
         <file>icons/sigma.png</file>
         <file>icons/sigma2.png</file>
+        <file>icons/sigma3.png</file>
     </qresource>
     <qresource prefix="/log">
         <file>update_log.txt</file>

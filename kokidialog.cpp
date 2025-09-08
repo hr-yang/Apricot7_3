@@ -1,4 +1,4 @@
-#include "kokidialog.h"
+﻿#include "kokidialog.h"
 #include "ui_kokidialog.h"
 #include "qt_settings_widgetdatacontrol.h"
 
@@ -18,7 +18,7 @@ KokiDialog::KokiDialog(QWidget *parent,QString stage1,QString label1,float resol
 {
     ui->setupUi(this);
 
-    this->setFixedSize(610,510);
+    this->setFixedSize(610,585);
 
     dialogName=stage1+stage2;
 

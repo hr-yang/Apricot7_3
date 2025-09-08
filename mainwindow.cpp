@@ -68,6 +68,9 @@ MainWindow::~MainWindow()
     delete nanoAction;
     delete laserCtrlAction;
     delete sigmaCtrlAction;
+    delete sigmaCtrl2Action;
+    delete sigmaCtrl3Action;
+
 
     delete ui;
 }
@@ -111,6 +114,11 @@ void MainWindow::createActions()
     sigmaCtrl2Action->setStatusTip(tr("Open the sigma control window"));
     connect(sigmaCtrl2Action, SIGNAL(triggered()), this, SLOT(OpenSigmaCtrl2Slot()));
 
+    sigmaCtrl3Action = new QAction(QIcon(":/myicons/icons/sigma3.png"),tr("Sigma Control"), this);
+    sigmaCtrl3Action->setShortcut(tr("Ctrl+R"));
+    sigmaCtrl3Action->setStatusTip(tr("Open the sigma control window"));
+    connect(sigmaCtrl3Action, SIGNAL(triggered()), this, SLOT(OpenSigmaCtrl3Slot()));
+
 
     aboutAction = new QAction(tr("About"), this);
     aboutAction->setStatusTip(tr("about this"));
@@ -127,6 +135,7 @@ void MainWindow::createMenus()
     windowMenu->addAction(laserCtrlAction);
     windowMenu->addAction(sigmaCtrlAction);
     windowMenu->addAction(sigmaCtrl2Action);
+    windowMenu->addAction(sigmaCtrl3Action);
 
 
     helpMenu = menuBar()->addMenu(tr("Help"));
@@ -146,6 +155,7 @@ void MainWindow::createToolBars()
     windowTool->addAction(laserCtrlAction);
     windowTool->addAction(sigmaCtrlAction);
     windowTool->addAction(sigmaCtrl2Action);
+    windowTool->addAction(sigmaCtrl3Action);
 }
 
 
@@ -261,6 +271,22 @@ void MainWindow::OpenSigmaCtrl2Slot()
         connect(kokiDialog2,&KokiDialog::sendCloseSgn,this,&MainWindow::recieveCloseSlot);//接受子窗口关闭信号，保证一次只有一个子窗口被打开
         kokiDialog2->setWindowTitle("koki2");
         kokiDialog2->show();
+    }
+}
+
+void MainWindow::OpenSigmaCtrl3Slot()
+{
+    if(hashChildWindow.contains(QString("OSM20-85")+QString("OSM20-35")))//子窗口句柄已存在
+    {
+        qDebug()<<"already open koki dialog!";
+    }
+    else
+    {
+        KokiDialog *kokiDialog3 = new KokiDialog(this,"OSM20-85","unit is um",1,0,"OSM20-35","unit is um",1,0);
+        hashChildWindow.insert(QString("OSM20-85")+QString("OSM20-35"),kokiDialog3);//注册子窗口句柄
+        connect(kokiDialog3,&KokiDialog::sendCloseSgn,this,&MainWindow::recieveCloseSlot);//接受子窗口关闭信号，保证一次只有一个子窗口被打开
+        kokiDialog3->setWindowTitle("koki3");
+        kokiDialog3->show();
     }
 }
 
