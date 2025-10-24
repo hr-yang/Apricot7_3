@@ -1324,13 +1324,29 @@
     </property>
    </widget>
   </widget>
+  <widget class="QLineEdit" name="lineEdit">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>20</y>
+     <width>401</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 0, 0);</string>
+   </property>
+   <property name="frame">
+    <bool>false</bool>
+   </property>
+  </widget>
  </widget>
  <resources>
   <include location="mainwindow.qrc"/>
  </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_FH"/>
   <buttongroup name="buttonGroup_FH_2"/>
+  <buttongroup name="buttonGroup_FH"/>
  </buttongroups>
 </ui>

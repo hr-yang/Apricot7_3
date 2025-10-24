@@ -32,12 +32,17 @@ FPGA_setting::FPGA_setting(QWidget *parent) :
 
     //串口功能布局
     QHBoxLayout *comLayout = new QHBoxLayout();
-    QLabel* pCOMLabel = new QLabel("COM:");
+    //QLabel* pCOMLabel = new QLabel("COM:");
     mpPortComboBox    = new QComboBox();
     mpComPushButton   = new QPushButton("OpenCOM");
+    QLineEdit* portAlias=new QLineEdit();
+    portAlias->setFrame(false);
+    portAlias->setStyleSheet("color: rgb(255, 0, 0);");
+    portAlias->setObjectName("portAlias");
     connect(mpComPushButton,&QPushButton::clicked,this,&FPGA_setting::openComButtonSlot);
 
-    comLayout->addWidget(pCOMLabel);
+    //comLayout->addWidget(pCOMLabel);
+    comLayout->addWidget(portAlias);
     comLayout->addWidget(mpPortComboBox);
     comLayout->addWidget(mpComPushButton);
 
