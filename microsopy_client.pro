@@ -49,6 +49,7 @@ SOURCES += \
 
 
 HEADERS += \
+    Global.h \
         mainwindow.h \
     fpga_setting.h \
     molisdialog.h \

@@ -2,6 +2,7 @@
 #define MOLISDIALOG_H
 
 #include <QDialog>
+#include "Global.h"
 
 namespace Ui {
 class MolisDialog;
@@ -26,8 +27,8 @@ private:
     Ui::MolisDialog *ui;
 
 signals:
-    void setTTLParameters(int ch, bool enable, int trigSource, int trigEdge, int trigCount, int burstNumber, double period, double phase, double duty);
-    void setDAParameters(int ch, bool enable, int trigSource, int trigEdge,int trigCount, int waveType, int burstNumber, double period, double phase, double duty, int step, int readLen, double dma_period);
+    void setTTLParameters(int ch, bool enable, TrigSource trigSource, TrigEdge trigEdge, int trigCount, int burstNumber, double period, double phase, double duty);
+    void setDAParameters(int ch, bool enable, TrigSource trigSource, TrigEdge trigEdge,int trigCount, WaveType waveType, int burstNumber, double period, double phase, double duty, int step, int readLen, double dma_period);
 
 };
 

@@ -22,6 +22,11 @@ FPGA_setting::FPGA_setting(QWidget *parent) :
     settingsFile2(nullptr),
     settingsFile3(nullptr)
 {
+
+    qRegisterMetaType<TrigSource>("TrigSource");
+    qRegisterMetaType<TrigEdge>("TrigEdge");
+    qRegisterMetaType<WaveType>("WaveType");
+
     this->setObjectName("FPGA_Setting");
     this->setWindowIcon(QIcon(":/myicons/icons/fpga.png"));
     this->setWindowTitle("FPGA Setting");
@@ -37,7 +42,7 @@ FPGA_setting::FPGA_setting(QWidget *parent) :
     mpComPushButton   = new QPushButton("OpenCOM");
     QLineEdit* portAlias=new QLineEdit();
     portAlias->setFrame(false);
-    portAlias->setStyleSheet("color: rgb(255, 0, 0);");
+    portAlias->setStyleSheet("color: rgb(255, 0, 0);background-color: rgb(255, 255, 127);");
     portAlias->setObjectName("portAlias");
     connect(mpComPushButton,&QPushButton::clicked,this,&FPGA_setting::openComButtonSlot);
 
@@ -126,7 +131,7 @@ FPGA_setting::FPGA_setting(QWidget *parent) :
 
 
     QPushButton* pSetParametersPushButton=new QPushButton("SetParameters");
-    connect(pSetParametersPushButton,&QPushButton::clicked,this,&FPGA_setting::setSynSlot);
+    connect(pSetParametersPushButton,&QPushButton::clicked,this,&FPGA_setting::setParameters);
 
 
     QPushButton* pSynPushButton=new QPushButton("Syn");
@@ -143,11 +148,12 @@ FPGA_setting::FPGA_setting(QWidget *parent) :
     horizontalLayout_tool->addItem(new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
     horizontalLayout_tool->addLayout(horizontalLayout_4);
     horizontalLayout_tool->addItem(new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
+
+    horizontalLayout_tool->addWidget(pMolisPushButton);
     horizontalLayout_tool->addWidget(pSwitchPushButton);
     horizontalLayout_tool->addWidget(pGratingPushButton);
     horizontalLayout_tool->addWidget(pSIMPushButton);
     horizontalLayout_tool->addWidget(pChartPushButton);
-    horizontalLayout_tool->addWidget(pMolisPushButton);
     horizontalLayout_tool->addWidget(pResetFPGAPushButton);
     horizontalLayout_tool->addItem(new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
     horizontalLayout_tool->addWidget(pSetParametersPushButton);
@@ -170,8 +176,8 @@ FPGA_setting::FPGA_setting(QWidget *parent) :
     connect(DA_channel0,&fpgachannel::send_BRAM_DA_Sgn,this,&FPGA_setting::send_BRAM_DA_Data);
     connect(DA_channel1,&fpgachannel::send_BRAM_DA_Sgn,this,&FPGA_setting::send_BRAM_DA_Data);
 
-    connect(DA_channel0,&fpgachannel::sendSoftTrigSgn,this,&FPGA_setting::sendSoftTrigParamters);
-    connect(DA_channel1,&fpgachannel::sendSoftTrigSgn,this,&FPGA_setting::sendSoftTrigParamters);
+    connect(DA_channel0,&fpgachannel::softTrig,this,&FPGA_setting::softTrig);
+    connect(DA_channel1,&fpgachannel::softTrig,this,&FPGA_setting::softTrig);
 
     connect(TTL_channel0,&FPGA_TTL::send_TTL_ParamtersSgn,this,&FPGA_setting::send_TTL_Paramters);
     connect(TTL_channel1,&FPGA_TTL::send_TTL_ParamtersSgn,this,&FPGA_setting::send_TTL_Paramters);
@@ -180,12 +186,12 @@ FPGA_setting::FPGA_setting(QWidget *parent) :
     connect(TTL_channel4,&FPGA_TTL::send_TTL_ParamtersSgn,this,&FPGA_setting::send_TTL_Paramters);
     connect(TTL_channel5,&FPGA_TTL::send_TTL_ParamtersSgn,this,&FPGA_setting::send_TTL_Paramters);
 
-    connect(TTL_channel0,&FPGA_TTL::sendSoftTrigSgn,this,&FPGA_setting::sendSoftTrigParamters);
-    connect(TTL_channel1,&FPGA_TTL::sendSoftTrigSgn,this,&FPGA_setting::sendSoftTrigParamters);
-    connect(TTL_channel2,&FPGA_TTL::sendSoftTrigSgn,this,&FPGA_setting::sendSoftTrigParamters);
-    connect(TTL_channel3,&FPGA_TTL::sendSoftTrigSgn,this,&FPGA_setting::sendSoftTrigParamters);
-    connect(TTL_channel4,&FPGA_TTL::sendSoftTrigSgn,this,&FPGA_setting::sendSoftTrigParamters);
-    connect(TTL_channel5,&FPGA_TTL::sendSoftTrigSgn,this,&FPGA_setting::sendSoftTrigParamters);
+    connect(TTL_channel0,&FPGA_TTL::softTrig,this,&FPGA_setting::softTrig);
+    connect(TTL_channel1,&FPGA_TTL::softTrig,this,&FPGA_setting::softTrig);
+    connect(TTL_channel2,&FPGA_TTL::softTrig,this,&FPGA_setting::softTrig);
+    connect(TTL_channel3,&FPGA_TTL::softTrig,this,&FPGA_setting::softTrig);
+    connect(TTL_channel4,&FPGA_TTL::softTrig,this,&FPGA_setting::softTrig);
+    connect(TTL_channel5,&FPGA_TTL::softTrig,this,&FPGA_setting::softTrig);
 
 
     //主页面布局
@@ -205,7 +211,7 @@ FPGA_setting::FPGA_setting(QWidget *parent) :
     this->setLayout(gridLayout);
 
     molisDialog=new MolisDialog(this);
-    connect(molisDialog,&MolisDialog::setTTLParameters,this,[=](int ch, bool enable, int trigSource, int trigEdge, int trigCount, int burstNumber, double period, double phase, double duty){
+    connect(molisDialog,&MolisDialog::setTTLParameters,this,[=](int ch, bool enable, TrigSource trigSource, TrigEdge trigEdge, int trigCount, int burstNumber, double period, double phase, double duty){
         switch (ch) {
             case 0: TTL_channel0->setParameters(enable, trigSource, trigEdge, trigCount, burstNumber, period, phase, duty); break;
             case 1: TTL_channel1->setParameters(enable, trigSource, trigEdge, trigCount, burstNumber, period, phase, duty); break;
@@ -217,7 +223,7 @@ FPGA_setting::FPGA_setting(QWidget *parent) :
         }
     });
 
-    connect(molisDialog,&MolisDialog::setDAParameters,this,[=](int ch,  bool enable, int trigSource, int trigEdge,int trigCount, int waveType, int burstNumber, double period, double phase, double duty, int step, int readLen, double dma_period){
+    connect(molisDialog,&MolisDialog::setDAParameters,this,[=](int ch,  bool enable, TrigSource trigSource, TrigEdge trigEdge,int trigCount, WaveType waveType, int burstNumber, double period, double phase, double duty, int step, int readLen, double dma_period){
         switch (ch) {
             case 0: DA_channel0->setParameters(enable, trigSource, trigEdge,trigCount, waveType, burstNumber, period, phase, duty, step, readLen, dma_period); break;
             case 1: DA_channel1->setParameters(enable, trigSource, trigEdge,trigCount, waveType, burstNumber, period, phase, duty, step, readLen, dma_period); break;
@@ -875,28 +881,28 @@ void FPGA_setting::showMolisDialogSlot()
 
 
 
-void FPGA_setting::setSynSlot()//一键设置同步功能
+void FPGA_setting::setParameters()//一键设置同步功能
 {
-    TTL_channel0->setSyn();
+    TTL_channel0->sendParameters();
     QThread::msleep(10);
-    TTL_channel1->setSyn();
+    TTL_channel1->sendParameters();
     QThread::msleep(10);
-    TTL_channel2->setSyn();
+    TTL_channel2->sendParameters();
     QThread::msleep(10);
-    TTL_channel3->setSyn();
+    TTL_channel3->sendParameters();
     QThread::msleep(10);
-    TTL_channel4->setSyn();
+    TTL_channel4->sendParameters();
     QThread::msleep(10);
-    TTL_channel5->setSyn();
+    TTL_channel5->sendParameters();
     QThread::msleep(10);
-    DA_channel0->setSyn();
+    DA_channel0->sendParameters();
     QThread::msleep(10);
-    DA_channel1->setSyn();
+    DA_channel1->sendParameters();
 }
 
 void FPGA_setting::synSlot()
 {
-    sendSoftTrigParamters(8);//设置所有通道一起触发
+    softTrig(8);//设置所有通道一起触发
 }
 
 
@@ -1139,7 +1145,7 @@ void FPGA_setting::send_BRAM_DA_Data(uchar axis, uchar table_len,uint16_t *buffe
     }
 }
 
-void FPGA_setting::sendSoftTrigParamters(uchar order)
+void FPGA_setting::softTrig(uchar order)
 {
     uchar _cnt=0;
     char data_to_send[50];	//发送数据缓存

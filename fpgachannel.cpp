@@ -115,12 +115,20 @@ void fpgachannel::comboxProcessSlot(int id)
     if(id<4)
     {
         ui->stackedWidget_DA->setCurrentIndex(0);//AXI DA页面
-        ui->stackedWidget_Mode->setCurrentIndex(id);    //每个波形的专属子页面
     }
-    else if(id==4)
-        ui->stackedWidget_DA->setCurrentIndex(1);//BRAM DA页面
-    else if(id==5)
-        ui->stackedWidget_DA->setCurrentIndex(2);//DMA DA页面
+    else if(id<8)
+    {
+        ui->stackedWidget_DA->setCurrentIndex(1);//AXI DA页面
+        ui->stackedWidget_Mode->setCurrentIndex(id-4);    //每个波形的专属子页面
+    }
+    else if(id==8)
+    {
+        ui->stackedWidget_DA->setCurrentIndex(2);//BRAM DA页面
+    }
+    else if(id==9)
+    {
+        ui->stackedWidget_DA->setCurrentIndex(3);//DMA DA页面
+    }
 }
 
 
@@ -184,6 +192,8 @@ void fpgachannel::sendProcessSlot()
     QPushButton* btn = qobject_cast<QPushButton*>(sender());
     if(btn->objectName()=="pushButton_Send")//Send按钮按下
     {
+        uchar  mode  = ui->comboBox->currentIndex();
+
         //触发源参数
         uchar trig_source = ui->comboBox_Source->currentIndex();
         uchar trig_edge   = ui->buttonGroup->checkedId();
@@ -197,7 +207,6 @@ void fpgachannel::sendProcessSlot()
         int max_value_tmp=(max_value+5)/10.0f*16383 + 0.5f;
         int min_value_tmp=(min_value+5)/10.0f*16383 + 0.5f;
 
-
         //波形时间参数
         uint32_t   period_number = ui->lineEdit_PeriodNumber->text().toInt();
         float      period        = QString(ui->lineEdit_Period->text()).toFloat();
@@ -206,17 +215,23 @@ void fpgachannel::sendProcessSlot()
         int        step          = QString(ui->stepLineEdit->text()).toInt();
         int        read_len      = QString(ui->lineEdit_ReadLen->text()).toInt();
         int        start_value   = (max_value_tmp-min_value_tmp)*phase/period+min_value_tmp;//计算波形起始电压
-        uchar      mode          = ui->comboBox->currentIndex()+4;//  加4是波形模式偏置，前面分别是零值、当前值、最小值、最大值
+
 
         //所有参数都必须转化为整形
         int period_tmp = 50000000 * period/1000.0;   //周期数
         int phase_tmp  = 50000000 * phase /1000.0; //相位数
         int duty_tmp   = 50000000 * duty  /1000.0; //占空比数
 
-        if(mode==9)//DMA DA
+        if(mode==DMA_DA)
         {
             float period  = QString(ui->lineEdit_Period_DMADA->text()).toFloat();
             period_tmp=   50000000 * period/1000.0;   //周期数
+        }
+        if(mode==DIRECT)
+        {
+            float value=QString(ui->lineEdit_Value->text()).toFloat();
+            value = value>= -5? (value<=5? value:5) : -5;//value 在-5~5
+            start_value=(value+5)/10.0f*16383 + 0.5f;
         }
 
         //发送信号
@@ -224,16 +239,17 @@ void fpgachannel::sendProcessSlot()
                          start_value, min_value_tmp,max_value_tmp,  //传错变量类型,float传入uint32_t,导致数据错误 大坑！！！
                          period_tmp,duty_tmp,phase_tmp,step,read_len,
                          period_number,mode);
+
     }
     else if(btn->objectName()=="PushButton_SoftTrig")//软触发按钮按下
     {
-        emit sendSoftTrigSgn(channel_axis+6);//这里把uaxis编号转化为order    前6个轴是TTL通道
+        emit softTrig(channel_axis+6);//这里把uaxis编号转化为order    前6个轴是TTL通道
     }
     else//调整和设置波形参数值
     {
         float step_value;
         float value=0;
-        enum send_mode mode;
+        uchar mode;
 
         if(btn->objectName()=="pushButton_SetValue")
         {
@@ -346,7 +362,7 @@ void fpgachannel::sendProcessSlot()
 
         value = value>= -5? (value<=5? value:5) : -5;//value 在-5~5
         int value_tmp=(value+5)/10.0f*16383 + 0.5f;
-        mode=direct;
+        mode=DIRECT;
         emit send_DA_Sgn(channel_axis ,0,0,1,
                          value_tmp, 0,0,
                          0,0,0,0,0,
@@ -354,7 +370,7 @@ void fpgachannel::sendProcessSlot()
     }
 }
 
-void fpgachannel::setParameters(bool enable, int trigSource, int trigEdge,int trigCount,int waveType, int burstNumber, double period, double phase, double duty, int step, int readLen, double dma_period)
+void fpgachannel::setParameters(bool enable, TrigSource trigSource, TrigEdge trigEdge,int trigCount,WaveType waveType, int burstNumber, double period, double phase, double duty, int step, int readLen, double dma_period)
 {
     ui->groupBox->setChecked(enable);
 
@@ -374,7 +390,7 @@ void fpgachannel::setParameters(bool enable, int trigSource, int trigEdge,int tr
 }
 
 
-void fpgachannel::setSyn()//一键设置同步功能
+void fpgachannel::sendParameters()//一键设置同步功能
 {
     ui->pushButton_Send->click();//点击发送按钮
 }

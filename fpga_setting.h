@@ -24,6 +24,7 @@
 #include "mychartdata.h"
 #include "switchbutton.h"
 #include "molisdialog.h"
+#include "Global.h"
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -125,7 +126,7 @@ private slots:
         void showSIMDialogSlot();
         void OnShowSwitchDialog();
         void showGratingDialogSlot();
-        void setSynSlot();
+        void setParameters();
         void synSlot();
         void sendSIMChannelSlot();
         void profileModeButtonsSlot();
@@ -150,7 +151,7 @@ private slots:
                                              uint32_t period,uint32_t duty,uint32_t phase,uint32_t step,uint32_t read_len,
                                              uint32_t period_number,uchar mode);
         void send_BRAM_DA_Data(uchar axis, uchar table_len,uint16_t *buffer);
-        void sendSoftTrigParamters(uchar order);
+        void softTrig(uchar order);
         void sendSIMChannel(uchar trig_edge,uchar trig_counter,uchar op_channel,uchar n_sequence);
         void sendSoftReset(void);
         void sendGratingTable(uint32_t trig_sign, uchar trig_number,int32_t *buffer);

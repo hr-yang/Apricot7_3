@@ -38,19 +38,19 @@ FPGA_TTL::~FPGA_TTL()
 void FPGA_TTL::sendProcessSlot()
 {
 
-    enum send_mode mode;
+    uchar mode;
 
     QPushButton* btn = qobject_cast<QPushButton*>(sender());
 
     if(btn->objectName()=="pushButton_High")
     {
-        mode=max;
+        mode=MAX;
         emit send_TTL_ParamtersSgn(channel_axis,0,0,1,
                               0,0,0,0,mode);
     }
     else if(btn->objectName()=="pushButton_Low")
     {
-        mode=min;
+        mode=MIN;
         emit send_TTL_ParamtersSgn(channel_axis,0,0,1,
                               0,0,0,0,mode);
     }
@@ -67,7 +67,7 @@ void FPGA_TTL::sendProcessSlot()
         int phase_tmp  = 50000000 * phase /1000.0; //相位数
         int duty_tmp   = 50000000 * duty  /1000.0; //占空比数
 
-        mode=square_wave;
+        mode=SQUARE_WAVE;
         uint32_t period_number=ui->lineEdit_PeriodNumber->text().toInt();
 
         emit send_TTL_ParamtersSgn(channel_axis,trig_source,trig_edge,trig_count,
@@ -75,11 +75,11 @@ void FPGA_TTL::sendProcessSlot()
     }
     else if(btn->objectName()=="pushButton_SoftTrig")
     {
-        emit sendSoftTrigSgn(channel_axis);
+        emit softTrig(channel_axis);
     }
 }
 
-void FPGA_TTL::setParameters(bool enable, int trigSource, int trigEdge,int trigCount, int burstNumber, double period, double phase, double duty)
+void FPGA_TTL::setParameters(bool enable, TrigSource trigSource, TrigEdge trigEdge,int trigCount, int burstNumber, double period, double phase, double duty)
 {
     ui->groupBox->setChecked(enable);
 
@@ -93,7 +93,7 @@ void FPGA_TTL::setParameters(bool enable, int trigSource, int trigEdge,int trigC
     ui->lineEdit_Duty->setText(QString::number(duty));
 }
 
-void FPGA_TTL::setSyn()//一键设置同步功能
+void FPGA_TTL::sendParameters()//一键设置同步功能
 {
    ui->pushButton_Send->click();//点击发送按钮
 }

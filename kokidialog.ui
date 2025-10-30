@@ -458,7 +458,8 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 0, 0);</string>
+      <string notr="true">color: rgb(255, 0, 0);
+background-color: rgb(255, 255, 127);</string>
      </property>
      <property name="frame">
       <bool>false</bool>
@@ -474,7 +475,8 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 0, 0);</string>
+      <string notr="true">color: rgb(255, 0, 0);
+background-color: rgb(255, 255, 127);</string>
      </property>
      <property name="frame">
       <bool>false</bool>
@@ -490,7 +492,8 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 0, 0);</string>
+      <string notr="true">color: rgb(255, 0, 0);
+background-color: rgb(255, 255, 127);</string>
      </property>
      <property name="frame">
       <bool>false</bool>
@@ -506,7 +509,8 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 0, 0);</string>
+      <string notr="true">color: rgb(255, 0, 0);
+background-color: rgb(255, 255, 127);</string>
      </property>
      <property name="frame">
       <bool>false</bool>
@@ -1092,7 +1096,8 @@
       <bool>false</bool>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 0, 0);</string>
+      <string notr="true">color: rgb(255, 0, 0);
+background-color: rgb(255, 255, 127);</string>
      </property>
      <property name="frame">
       <bool>false</bool>
@@ -1108,7 +1113,8 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 0, 0);</string>
+      <string notr="true">color: rgb(255, 0, 0);
+background-color: rgb(255, 255, 127);</string>
      </property>
      <property name="frame">
       <bool>false</bool>
@@ -1124,7 +1130,8 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 0, 0);</string>
+      <string notr="true">color: rgb(255, 0, 0);
+background-color: rgb(255, 255, 127);</string>
      </property>
      <property name="frame">
       <bool>false</bool>
@@ -1140,7 +1147,8 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 0, 0);</string>
+      <string notr="true">color: rgb(255, 0, 0);
+background-color: rgb(255, 255, 127);</string>
      </property>
      <property name="frame">
       <bool>false</bool>
@@ -1334,7 +1342,8 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: rgb(255, 0, 0);</string>
+    <string notr="true">color: rgb(255, 0, 0);
+background-color: rgb(255, 255, 127);</string>
    </property>
    <property name="frame">
     <bool>false</bool>
